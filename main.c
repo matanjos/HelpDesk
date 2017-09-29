@@ -3,9 +3,9 @@
 
 typedef struct net{
     unsigned char dig1;
-    int dig2;
-    int dig3;
-    int dig4;
+    unsigned char dig2;
+    unsigned char dig3;
+    unsigned char dig4;
 }IP;
 
 typedef struct maquina{
@@ -24,19 +24,70 @@ typedef struct node {
     struct node *father;
 }NODE;
 typedef NODE * ARV_BIN_ENC;
-/*
-void lerinfos(){
+
+void lerinfos(MAQUINA *pc){
+    printf("CADASTRO DE MAQUINA: \n\n");
+
+    printf("Informe o Numero de Serie (ID): ");
+    scanf("%d",&pc->id);
+    fflush(stdin);
+    printf("Informe a Marca: ");
+    scanf("%s",pc->marca);
+    
+    fflush(stdin);
+    printf("Informe o modelo: ");
+    scanf("%s",pc->modelo);
+    
+    fflush(stdin);
+    printf("Informe o Sistema Operacional: ");
+    scanf("%s",pc->SO);
+    
+    fflush(stdin);
+    printf("Informe o estado atual da maquina: \nM - Manutencao. \n B - Bom estado/em uso. \n D - Deposito. \n");
+    scanf("%c",&(pc)->estado);
+    
+    fflush(stdin);
+    printf("Informe o IP da maquina: (0 a 255, com espacos)Ex: 192 168 0 20 \n");
+    scanf("%d %d %d %d", &(pc->ip).dig1, &(pc->ip).dig2, &(pc->ip).dig3, &(pc->ip).dig4);
 
 }
-*/
 
-//void maketree(ARV_BIN_ENC * arv, MAQUINA comp){
-	
-//}
+void maketree(ARV_BIN_ENC * arv, MAQUINA comp){
+	*arv = (ARV_BIN_ENC) malloc (sizeof (NODE));
+    if (!(*arv)){
+        printf("Memoria nao alocada!");
+        exit(1);
+    }
+    (*arv)->pc = comp;
+    (*arv)->left = NULL;
+    (*arv)->right = NULL;
+    (*arv)->father = NULL;
+}
 
+void listarNo(ARV_BIN_ENC *arv){
+    printf("id: %d\n",((*arv)->pc).id);
+    printf("marca: %s\n",((*arv)->pc).marca);
+    printf("modelo: %s\n",((*arv)->pc).modelo);
+    printf("so: %s\n",((*arv)->pc).SO);
+    printf("estado: %c\n",((*arv)->pc).estado);
+    printf("IP: %d.%d.%d.%d \n", ((*arv)->pc).ip.dig1, ((*arv)->pc).ip.dig2, ((*arv)->pc).ip.dig3, ((*arv)->pc).ip.dig4);
+    system("pause");
+}
+
+void ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
+    if (!(*arv)){
+        maketree(arv,comp);
+        printf("entrou");
+    }
+    else
+        if ((comp.id) < ((*arv)->pc).id)
+            ins_ele(&((*arv)->left), comp);
+        else
+            ins_ele(&((*arv)->right), comp);
+}
 //MAQUINA buscaID(ARV_BIN_ENC, int); // id
 //void buscaIDprint(ARV_BIN_ENC, int);
-//void ins_ele(ARV_BIN_ENC *, MAQUINA);
+
 //void remocaoPorCopia(ARV_BIN_ENC *, int);
 //void balancearArv(ARV_BIN_ENC *);
 
@@ -69,37 +120,9 @@ int main(){
         switch(menu){
             case 1:
             		cabecalho();
-            		
-					printf("CADASTRO DE MAQUINA: \n\n");
-					
-					fflush(stdin);
-					printf("Informe a Marca: ");
-					scanf("%s",computador.marca);
-					
-					fflush(stdin);
-					printf("Informe o modelo: ");
-					scanf("%s",computador.modelo);
-					
-					fflush(stdin);
-					printf("Informe o Sistema Operacional: ");
-					scanf("%s",computador.SO);
-					
-					fflush(stdin);
-					printf("Informe o estado atual da maquina: \nM - Manutencao. \n B - Bom estado/em uso. \n D - Deposito. \n");
-					scanf("%c",&computador.estado);
-					
-					fflush(stdin);
-					printf("Informe o IP da maquina: (0 a 255, com espacos)Ex: 192 168 0 20 \n");
-					scanf("%d %d %d %d", &computador.ip.dig1, &computador.ip.dig2, &computador.ip.dig3, &computador.ip.dig4);
-                    
-					printf("marca: %s\n",computador.marca);
-					printf("modelo: %s\n",computador.modelo);
-					printf("so: %s\n",computador.SO);
-					printf("estado: %c\n",computador.estado);
-                    printf("IP: %d.%d.%d.%d \n",computador.ip.dig1,computador.ip.dig2,computador.ip.dig3,computador.ip.dig4);
-                    system("pause");
-					//printf("IP: %c.%c.%c.%c \n",computador.ip.dig1,computador.ip.dig2,computador.ip.dig3,computador.ip.dig4);
-                //maketree(&info,computador);*/
+					lerinfos(&computador);
+                    ins_ele(&info,computador);
+                    //listarNo(&info);
                 break;
             case 2:
                 //INSERIR
