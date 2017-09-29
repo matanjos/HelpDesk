@@ -2,7 +2,7 @@
 #include<stdlib.h>
 
 typedef struct net{
-    int dig1;
+    unsigned char dig1;
     int dig2;
     int dig3;
     int dig4;
@@ -56,7 +56,7 @@ int main(){
     MAQUINA computador;
     do{
         cabecalho();
-        printf("1 - receber valores e INICIAR ARVORE \n");
+        printf("1 - RECEBER VALORES E INICIAR ARVORE \n");
         printf("2 - INSERIR: \n");
         printf("3 - REMOVER: \n");
         printf("4 - LISTAR: \n");
@@ -86,17 +86,19 @@ int main(){
 					
 					fflush(stdin);
 					printf("Informe o estado atual da maquina: \nM - Manutencao. \n B - Bom estado/em uso. \n D - Deposito. \n");
-					scanf("%s",computador.estado);
+					scanf("%c",&computador.estado);
 					
 					fflush(stdin);
-					printf("Informe o IP da maquina: (sem )Ex: 192 168 0 20");
-					scanf("%d", &computador.ip.dig1);
-	
-				/*	printf("marca: %s\n",computador.marca);
+					printf("Informe o IP da maquina: (0 a 255, com espacos)Ex: 192 168 0 20 \n");
+					scanf("%d %d %d %d", &computador.ip.dig1, &computador.ip.dig2, &computador.ip.dig3, &computador.ip.dig4);
+                    
+					printf("marca: %s\n",computador.marca);
 					printf("modelo: %s\n",computador.modelo);
 					printf("so: %s\n",computador.SO);
 					printf("estado: %c\n",computador.estado);
-					printf("IP: %c.%c.%c.%c \n",computador.ip.dig1,computador.ip.dig2,computador.ip.dig3,computador.ip.dig4);
+                    printf("IP: %d.%d.%d.%d \n",computador.ip.dig1,computador.ip.dig2,computador.ip.dig3,computador.ip.dig4);
+                    system("pause");
+					//printf("IP: %c.%c.%c.%c \n",computador.ip.dig1,computador.ip.dig2,computador.ip.dig3,computador.ip.dig4);
                 //maketree(&info,computador);*/
                 break;
             case 2:
