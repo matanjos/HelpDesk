@@ -25,27 +25,40 @@ typedef struct node {
 }NODE;
 typedef NODE * ARV_BIN_ENC;
 
+void fpause2(){
+	setbuf(stdin,NULL);
+    fflush(stdin);
+	printf("Pressione alguma tecla pra continuar... \n");
+	 getchar();
+}
+
 void lerinfos(MAQUINA *pc){
     printf("CADASTRO DE MAQUINA: \n\n");
 
     printf("Informe o Numero de Serie (ID): ");
     scanf("%d",&pc->id);
+
+    setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe a Marca: ");
     scanf("%s",pc->marca);
     
+    setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o modelo: ");
     scanf("%s",pc->modelo);
     
+    setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o Sistema Operacional: ");
     scanf("%s",pc->SO);
     
+    setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o estado atual da maquina: \nM - Manutencao. \n B - Bom estado/em uso. \n D - Deposito. \n");
     scanf("%c",&(pc)->estado);
     
+    setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o IP da maquina: (0 a 255, com espacos)Ex: 192 168 0 20 \n");
     scanf("%d %d %d %d", &(pc->ip).dig1, &(pc->ip).dig2, &(pc->ip).dig3, &(pc->ip).dig4);
@@ -71,19 +84,21 @@ void listarNo(ARV_BIN_ENC *arv){
     printf("so: %s\n",((*arv)->pc).SO);
     printf("estado: %c\n",((*arv)->pc).estado);
     printf("IP: %d.%d.%d.%d \n", ((*arv)->pc).ip.dig1, ((*arv)->pc).ip.dig2, ((*arv)->pc).ip.dig3, ((*arv)->pc).ip.dig4);
-    system("pause");
+	
+fpause2();   
 }
 
-void ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
+ARV_BIN_ENC ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
     if (!(*arv)){
         maketree(arv,comp);
         printf("entrou");
     }
     else
         if ((comp.id) < ((*arv)->pc).id)
-            ins_ele(&((*arv)->left), comp);
+            (*arv)->left = ins_ele(&((*arv)->left), comp);
         else
-            ins_ele(&((*arv)->right), comp);
+             (*arv)->right = ins_ele(&((*arv)->right), comp);
+    return(*arv);
 }
 //MAQUINA buscaID(ARV_BIN_ENC, int); // id
 //void buscaIDprint(ARV_BIN_ENC, int);
@@ -94,16 +109,18 @@ void ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
 
 
 void cabecalho(){
-    system("cls");
+    //system("clear");
     printf("------------------------------------------------------\n");
     printf("\t\t\tHELP DESK\n");
     printf("------------------------------------------------------\n\n");
 }
 
 
+
+
 int main(){
     int menu;
-    ARV_BIN_ENC info;
+    ARV_BIN_ENC info = NULL;
     MAQUINA computador;
     do{
         cabecalho();
@@ -121,11 +138,15 @@ int main(){
             case 1:
             		cabecalho();
 					lerinfos(&computador);
-                    ins_ele(&info,computador);
-                    //listarNo(&info);
+                    info = ins_ele(&info,computador);
+                    listarNo(&info);
                 break;
             case 2:
-                //INSERIR
+			 printf("paiinfo: %d\n",(info->pc).id);
+                   printf("filho esq info: %d\n",((info->left)->pc).id);
+	printf("filho dir info: %d\n",((info->right)->pc).id);
+	fpause2();   
+
                 break;
             case 3:
                 //REMOVER
@@ -144,11 +165,11 @@ int main(){
                 break;
             case 8:
                 printf("Sistema finalizado. \n");
-                system("pause");
-                break;
+		fpause2();               
+              break;
             default: 
                 printf("Opcao invalida\n");
-                system("pause");
+               fpause2();   
         }
     }while(menu != 8);
 }
