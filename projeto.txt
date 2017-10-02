@@ -61,3 +61,17 @@ void ins_ele (ARV_BIN_BUSCA *arv, int v){
 }
 
 //------------------------------//
+
+void rotacao_direita(ARV_BIN_ENC *arvore){
+    ARV_BIN_ENC aux1, aux2;
+    aux1 = (*arvore)->esq;         //TA SEM FATHER POHA
+    aux2 = aux1->dir;
+    (*arvore)->esq = aux2;
+    aux1->dir = (*arvore);
+    *arvore = aux1;
+}
+while ( tmp != 0 )
+ if tmp tem um filho à esquerda
+ Rotacione este filho em torno de tmp
+ Ajuste tmp ao filho que acabou de se tornar pai
+ else ajuste tmp ao seu filho direito 

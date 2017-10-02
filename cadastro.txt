@@ -1,0 +1,31 @@
+1
+9
+DELL
+TRX-3567
+Windows 10 PRO
+m
+192 168 0 50
+
+1
+12
+HP
+HP1000
+Windows 7
+b
+192 168 0 51
+
+1
+10
+Itautec
+IT2092
+Windows 8
+b
+192 168 0 52
+
+1
+8
+Positivo
+POSX-1008
+Windows 10 PRO
+b
+192 168 0 53

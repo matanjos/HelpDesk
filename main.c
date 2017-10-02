@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h> 
 
 typedef struct net{
     unsigned char dig1;
@@ -10,8 +11,8 @@ typedef struct net{
 
 typedef struct maquina{
     unsigned int id;
-    char marca[20];
-    char modelo[20];
+    char marca[30];
+    char modelo[30];
     char SO[30];
     char estado;
     IP ip;
@@ -21,48 +22,162 @@ typedef struct node {
     MAQUINA pc;
     struct node *left;
     struct node *right;
-    struct node *father;
 }NODE;
 typedef NODE * ARV_BIN_ENC;
 
-void fpause2(){
+void maketree(ARV_BIN_ENC *, MAQUINA);
+void listarNo(ARV_BIN_ENC);
+void ins_ele(ARV_BIN_ENC *, MAQUINA);
+void InOrdem(ARV_BIN_ENC);
+ARV_BIN_ENC left(ARV_BIN_ENC);
+ARV_BIN_ENC right(ARV_BIN_ENC);
+ARV_BIN_ENC brother(ARV_BIN_ENC);
+ARV_BIN_ENC pesqID(ARV_BIN_ENC, int);
+
+
+void cabecalho();
+void fpause2();
+MAQUINA lerinfos(MAQUINA);
+
+
+//--------------------------------------------------------------------------------------------------------
+int main(){
+    int menu,aux;
+    ARV_BIN_ENC info = NULL,arvaux;
+    MAQUINA computador;
+    do{
+        cabecalho();
+        printf("1 - CADASTRAR COMPUTADOR\n");
+        printf("2 - LISTAR EM ORDEM CRESCENTE (PERCURSO IN-ORDEM): \n");
+        printf("3 - REMOVER: \n");
+        printf("5 - BALANCEAR: \n");
+        printf("6 - PESQUISA POR ID: \n");
+        printf("7 - PESQUISA POR ID LISTANDO VISITAS: \n");
+        printf("8 - SAIR: \n");
+        scanf("%d",&menu);
+
+        switch(menu){
+            case 1:
+            		cabecalho();
+                    ins_ele(&info,lerinfos(computador));
+                    fpause2();
+                break;
+            case 2:
+			        InOrdem(info);
+                    fpause2();
+                break;
+            case 3:
+                    //remover
+                break;
+            case 4:
+                    
+                break;
+            case 5:
+                //BALANCEAR
+                break;
+            case 6:
+                    printf("Informe o ID a ser procurado: \n");
+                    scanf("%d",&aux);
+                    arvaux = pesqID(info, aux);
+                    if(!arvaux){
+                        printf("ID nao encontrado! \n");
+                    }else{
+                        listarNo(arvaux);
+                    }
+                    fpause2();   
+                break;
+            case 7:
+                //PESQUISA ID LISTANDO
+                break;
+            case 8:
+                printf("Sistema finalizado. \n");
+		        fpause2();               
+              break;
+            default: 
+                printf("Opcao invalida\n");
+               fpause2();   
+        }
+    }while(menu != 8);
+
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------------
+
+/*ARV_BIN_ENC ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){ //recursiva, ubuntu
+    if (!(*arv)){
+        maketree(arv,comp);
+        printf("entrou");
+    }
+    else
+        if ((comp.id) < ((*arv)->pc).id)
+            (*arv)->left = ins_ele(&((*arv)->left), comp);
+        else
+            (*arv)->right = ins_ele(&((*arv)->right), comp);
+    return(*arv);
+
+
+
+    //------------------///
+     printf("paiinfo: %d\n",(info->pc).id);
+                   printf("filho esq info: %d\n",((info->left)->pc).id);
+                	printf("filho dir info: %d\n",((info->right)->pc).id);
+                	fpause2();   
+}*/
+
+//MAQUINA buscaID(ARV_BIN_ENC, int); // id
+//void buscaIDprint(ARV_BIN_ENC, int);
+
+//void remocaoPorCopia(ARV_BIN_ENC *, int);
+//void balancearArv(ARV_BIN_ENC *);
+
+void InOrdem(ARV_BIN_ENC arv) {
+    if (arv) {
+        InOrdem(left(arv)); 
+        listarNo(arv);
+        InOrdem(right(arv)); 
+    }
+}
+
+void fpause2(){                     
 	setbuf(stdin,NULL);
     fflush(stdin);
 	printf("Pressione alguma tecla pra continuar... \n");
-	 getchar();
+	getchar();
 }
 
-void lerinfos(MAQUINA *pc){
+MAQUINA lerinfos(MAQUINA pc){
     printf("CADASTRO DE MAQUINA: \n\n");
 
     printf("Informe o Numero de Serie (ID): ");
-    scanf("%d",&pc->id);
+    scanf("%d",&pc.id);
 
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe a Marca: ");
-    scanf("%s",pc->marca);
+    scanf("%29[^\n]",pc.marca);
     
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o modelo: ");
-    scanf("%s",pc->modelo);
+    scanf("%29[^\n]",pc.modelo);
     
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o Sistema Operacional: ");
-    scanf("%s",pc->SO);
+    scanf("%29[^\n]",pc.SO);
     
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o estado atual da maquina: \nM - Manutencao. \n B - Bom estado/em uso. \n D - Deposito. \n");
-    scanf("%c",&(pc)->estado);
+    scanf("%c",&(pc).estado);
     
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Informe o IP da maquina: (0 a 255, com espacos)Ex: 192 168 0 20 \n");
-    scanf("%d %d %d %d", &(pc->ip).dig1, &(pc->ip).dig2, &(pc->ip).dig3, &(pc->ip).dig4);
+    scanf("%d %d %d %d", &(pc.ip).dig1, &(pc.ip).dig2, &(pc.ip).dig3, &(pc.ip).dig4);
 
+    return pc;
 }
 
 void maketree(ARV_BIN_ENC * arv, MAQUINA comp){
@@ -74,102 +189,85 @@ void maketree(ARV_BIN_ENC * arv, MAQUINA comp){
     (*arv)->pc = comp;
     (*arv)->left = NULL;
     (*arv)->right = NULL;
-    (*arv)->father = NULL;
 }
 
-void listarNo(ARV_BIN_ENC *arv){
-    printf("id: %d\n",((*arv)->pc).id);
-    printf("marca: %s\n",((*arv)->pc).marca);
-    printf("modelo: %s\n",((*arv)->pc).modelo);
-    printf("so: %s\n",((*arv)->pc).SO);
-    printf("estado: %c\n",((*arv)->pc).estado);
-    printf("IP: %d.%d.%d.%d \n", ((*arv)->pc).ip.dig1, ((*arv)->pc).ip.dig2, ((*arv)->pc).ip.dig3, ((*arv)->pc).ip.dig4);
-	
-fpause2();   
-}
-
-ARV_BIN_ENC ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
-    if (!(*arv)){
-        maketree(arv,comp);
-        printf("entrou");
-    }
+void listarNo(ARV_BIN_ENC arv){
+    printf("\n-----------------------------------------------------------------\n");
+    printf("Numero de Serie (ID): %d\n\n",((arv)->pc).id);
+    printf("Marca: %s\n",((arv)->pc).marca);
+    printf("Modelo: %s\n",((arv)->pc).modelo);
+    printf("Sistema Operacional: %s\n",((arv)->pc).SO);
+    printf("Estado da Maquina: ");
+    if(((arv->pc).estado == 'M') || ((arv->pc).estado == 'm'))
+        printf("M - Manutencao.\n");
+    else if(((arv->pc).estado == 'B') || ((arv->pc).estado == 'b'))
+        printf("B - Bom estado / Em uso.\n");
     else
-        if ((comp.id) < ((*arv)->pc).id)
-            (*arv)->left = ins_ele(&((*arv)->left), comp);
-        else
-             (*arv)->right = ins_ele(&((*arv)->right), comp);
-    return(*arv);
+         printf("D - Deposito.\n");
+    printf("IP: %d.%d.%d.%d \n", ((arv)->pc).ip.dig1, ((arv)->pc).ip.dig2, ((arv)->pc).ip.dig3, ((arv)->pc).ip.dig4);
+
+    printf("\n-----------------------------------------------------------------\n");
 }
-//MAQUINA buscaID(ARV_BIN_ENC, int); // id
-//void buscaIDprint(ARV_BIN_ENC, int);
 
-//void remocaoPorCopia(ARV_BIN_ENC *, int);
-//void balancearArv(ARV_BIN_ENC *);
 
+
+void ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
+     if (!(*arv)){
+        maketree(arv,comp);
+    }else{ 
+        ARV_BIN_ENC aux = *arv,aux2=*arv,new;
+        int left=0;
+        while(aux){
+            if ((comp.id) < ((aux->pc).id)){
+                aux2 = aux;
+                aux = aux->left;
+                left = 1;
+            }else{
+                aux2 = aux;
+                aux = aux->right;
+                left = 0;
+            }
+        }
+            maketree(&new,comp);
+            if(left)
+                aux2->left = new;
+            else
+                aux2->right = new;
+    }
+}
+
+ARV_BIN_ENC pesqID(ARV_BIN_ENC arv, int id){
+     if (!(arv))
+        printf("Não consta no cadastro! \n");
+    else{ 
+        while(arv){
+            if (id < ((arv->pc).id)){
+                arv = arv->left;    
+            }else{
+                if(id == ((arv->pc).id)){   
+                    return arv;
+                    break;
+                }
+                arv = arv->right;
+            }
+        }  
+        return NULL;
+    }
+}
+
+ARV_BIN_ENC left(ARV_BIN_ENC arv){
+    return arv->left;
+}
+ARV_BIN_ENC right(ARV_BIN_ENC arv){
+    return arv->right;
+}
 
 
 void cabecalho(){
-    //system("clear");
+    system("clear > nul"); //verificar ubuntu
+    system("cls");
     printf("------------------------------------------------------\n");
     printf("\t\t\tHELP DESK\n");
     printf("------------------------------------------------------\n\n");
 }
 
-
-
-
-int main(){
-    int menu;
-    ARV_BIN_ENC info = NULL;
-    MAQUINA computador;
-    do{
-        cabecalho();
-        printf("1 - RECEBER VALORES E INICIAR ARVORE \n");
-        printf("2 - INSERIR: \n");
-        printf("3 - REMOVER: \n");
-        printf("4 - LISTAR: \n");
-        printf("5 - BALANCEAR: \n");
-        printf("6 - PESQUISA POR ID: \n");
-        printf("7 - PESQUISA POR ID LISTANDO VISITAS: \n");
-        printf("8 - SAIR: \n");
-        scanf("%d",&menu);
-
-        switch(menu){
-            case 1:
-            		cabecalho();
-					lerinfos(&computador);
-                    info = ins_ele(&info,computador);
-                    listarNo(&info);
-                break;
-            case 2:
-			 printf("paiinfo: %d\n",(info->pc).id);
-                   printf("filho esq info: %d\n",((info->left)->pc).id);
-	printf("filho dir info: %d\n",((info->right)->pc).id);
-	fpause2();   
-
-                break;
-            case 3:
-                //REMOVER
-                break;
-            case 4:
-                //LISTAR
-                break;
-            case 5:
-                //BALANCEAR
-                break;
-            case 6:
-                //PESQUISA ID
-                break;
-            case 7:
-                //PESQUISA ID LISTANDO
-                break;
-            case 8:
-                printf("Sistema finalizado. \n");
-		fpause2();               
-              break;
-            default: 
-                printf("Opcao invalida\n");
-               fpause2();   
-        }
-    }while(menu != 8);
-}
