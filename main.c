@@ -43,19 +43,18 @@ MAQUINA lerinfos(MAQUINA);
 ARV_BIN_ENC remocaoPorCopia(ARV_BIN_ENC arvore,int id) {
     if(!arvore)
         return arvore;
-
     if (id < (arvore->pc).id)
         arvore->left = remocaoPorCopia(arvore->left, id);
-    else if (id < (arvore->pc).id)
-        arvore->left = remocaoPorCopia(arvore->left, id);
+    else if (id > (arvore->pc).id)
+        arvore->right = remocaoPorCopia(arvore->right, id);
     else{
         ARV_BIN_ENC tmp= arvore, father;
-        if ((arvore)->left == NULL){
-            arvore = (arvore)->right;
+        if ((arvore)->right == NULL){
+            arvore = (arvore)->left;
             free (tmp);
             return arvore;
-        }else if ((arvore)->right == NULL){
-            arvore = (arvore)->left;
+        }else if ((arvore)->left == NULL){
+            arvore = (arvore)->right;
             free (tmp);
             return arvore;
         }
@@ -66,12 +65,10 @@ ARV_BIN_ENC remocaoPorCopia(ARV_BIN_ENC arvore,int id) {
                 tmp = tmp->right;
             }
             (arvore)->pc = tmp->pc;
-            if (father==arvore){
+            if (father==arvore)
                 father->left = tmp->left;
-            }else{
+            else
                 father->right = tmp->left;
-            }
-            free (tmp);
     }
         return arvore;
 }
