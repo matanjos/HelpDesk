@@ -7,7 +7,7 @@ m
 192 168 0 50
 
 1
-12
+13
 HP
 HP1000
 Windows 7
@@ -15,7 +15,7 @@ b
 192 168 0 51
 
 1
-10
+11
 Itautec
 IT2092
 Windows 8
@@ -25,7 +25,23 @@ b
 1
 8
 Positivo
-POSX-1008
+POSX-1009
 Windows 10 PRO
 b
 192 168 0 53
+
+1
+14
+Positivo
+POSX-1008
+Windows 10 PRO
+b
+192 168 0 54
+
+1
+12
+Positivo
+POSX-2000
+Windows 10 PRO
+b
+192 168 0 55

@@ -23,11 +23,12 @@ typedef struct node {
     struct node *left;
     struct node *right;
 }NODE;
+
 typedef NODE * ARV_BIN_ENC;
 
-void maketree(ARV_BIN_ENC *, MAQUINA);
+ARV_BIN_ENC maketree(ARV_BIN_ENC, MAQUINA);
 void listarNo(ARV_BIN_ENC);
-void ins_ele(ARV_BIN_ENC *, MAQUINA);
+ARV_BIN_ENC ins_ele(ARV_BIN_ENC, MAQUINA);
 void InOrdem(ARV_BIN_ENC);
 ARV_BIN_ENC left(ARV_BIN_ENC);
 ARV_BIN_ENC right(ARV_BIN_ENC);
@@ -39,11 +40,47 @@ void cabecalho();
 void fpause2();
 MAQUINA lerinfos(MAQUINA);
 
+ARV_BIN_ENC remocaoPorCopia(ARV_BIN_ENC arvore,int id) {
+    if(!arvore)
+        return arvore;
+
+    if (id < (arvore->pc).id)
+        arvore->left = remocaoPorCopia(arvore->left, id);
+    else if (id < (arvore->pc).id)
+        arvore->left = remocaoPorCopia(arvore->left, id);
+    else{
+        ARV_BIN_ENC tmp= arvore, father;
+        if ((arvore)->left == NULL){
+            arvore = (arvore)->right;
+            free (tmp);
+            return arvore;
+        }else if ((arvore)->right == NULL){
+            arvore = (arvore)->left;
+            free (tmp);
+            return arvore;
+        }
+            tmp = (arvore)->left;
+            father = arvore;
+            while (tmp->right!=NULL) {
+                father = tmp;
+                tmp = tmp->right;
+            }
+            (arvore)->pc = tmp->pc;
+            if (father==arvore){
+                father->left = tmp->left;
+            }else{
+                father->right = tmp->left;
+            }
+            free (tmp);
+    }
+        return arvore;
+}
+
 
 //--------------------------------------------------------------------------------------------------------
 int main(){
     int menu,aux;
-    ARV_BIN_ENC info = NULL,arvaux;
+    ARV_BIN_ENC info = NULL,arvaux = NULL;
     MAQUINA computador;
     do{
         cabecalho();
@@ -59,7 +96,7 @@ int main(){
         switch(menu){
             case 1:
             		cabecalho();
-                    ins_ele(&info,lerinfos(computador));
+                    info = ins_ele(info,lerinfos(computador));
                     fpause2();
                 break;
             case 2:
@@ -67,7 +104,25 @@ int main(){
                     fpause2();
                 break;
             case 3:
-                    //remover
+            
+                    printf("InOrdem traversal of the given tree \n");
+                    InOrdem(info);
+                
+                    printf("\nDelete 12\n");
+                    info = remocaoPorCopia(info, 12);
+                    printf("InOrdem traversal of the modified tree \n");
+                    InOrdem(info);
+                
+                    printf("\nDelete 30\n");
+                    info = remocaoPorCopia(info, 30);
+                    printf("InOrdem traversal of the modified tree \n");
+                    InOrdem(info);
+                
+                    printf("\nDelete 14\n");
+                    info = remocaoPorCopia(info, 14);
+                    printf("InOrdem traversal of the modified tree \n");
+                    InOrdem(info);
+                    fpause2();
                 break;
             case 4:
                     
@@ -180,15 +235,15 @@ MAQUINA lerinfos(MAQUINA pc){
     return pc;
 }
 
-void maketree(ARV_BIN_ENC * arv, MAQUINA comp){
-	*arv = (ARV_BIN_ENC) malloc (sizeof (NODE));
-    if (!(*arv)){
+ARV_BIN_ENC maketree(ARV_BIN_ENC arv, MAQUINA comp){
+	arv = (ARV_BIN_ENC) malloc (sizeof (NODE));
+    if (!(arv)){
         printf("Memoria nao alocada!");
         exit(1);
     }
-    (*arv)->pc = comp;
-    (*arv)->left = NULL;
-    (*arv)->right = NULL;
+    (arv)->pc = comp;
+    (arv)->left = NULL;
+    (arv)->right = NULL;
 }
 
 void listarNo(ARV_BIN_ENC arv){
@@ -211,31 +266,16 @@ void listarNo(ARV_BIN_ENC arv){
 
 
 
-void ins_ele(ARV_BIN_ENC *arv, MAQUINA comp){
-     if (!(*arv)){
-        maketree(arv,comp);
-    }else{ 
-        ARV_BIN_ENC aux = *arv,aux2=*arv,new;
-        int left=0;
-        while(aux){
-            if ((comp.id) < ((aux->pc).id)){
-                aux2 = aux;
-                aux = aux->left;
-                left = 1;
-            }else{
-                aux2 = aux;
-                aux = aux->right;
-                left = 0;
-            }
-        }
-            maketree(&new,comp);
-            if(left)
-                aux2->left = new;
-            else
-                aux2->right = new;
+ARV_BIN_ENC ins_ele(ARV_BIN_ENC arv, MAQUINA comp){ //recursiva, ubuntu
+    if (!(arv)){
+        return maketree(arv,comp);
     }
+    if ((comp.id) < ((arv->pc).id))
+        (arv)->left = ins_ele(arv->left, comp);
+    else
+        (arv)->right = ins_ele(arv->right, comp);
+    return(arv);
 }
-
 ARV_BIN_ENC pesqID(ARV_BIN_ENC arv, int id){
      if (!(arv))
         printf("Não consta no cadastro! \n");
