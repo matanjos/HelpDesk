@@ -61,7 +61,7 @@ int main(){
         printf("1 - CADASTRAR COMPUTADOR\n");
         printf("2 - LISTAR MAQUINAS POR ORDEM CRESCENTE DE ID: \n");
         printf("3 - REMOVER COMPUTADOR: \n");
-        printf("4 - OTIMIZAR BASE DE DADOS: \n");
+        printf("4 - OTIMIZAR BASE DE DADOS (ALGORITMO DSW): \n");
         printf("5 - PESQUISAR POR ID: \n");
         printf("6 - : \n");
         printf("7 - FILHOS A DIREITA (ESPINHA DORSAL): \n");
