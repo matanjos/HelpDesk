@@ -53,7 +53,7 @@ void fpause2();
 
 //--------------------------------------------------------------------------------------------------------
 int main(){
-    int menu,aux,contpc = 0;
+    int menu,aux2,contpc = 0;
     ARV_BIN_ENC info = NULL,arvaux = NULL;
     MAQUINA computador;
     do{
@@ -87,9 +87,9 @@ int main(){
                 break;
             case 3:
                     printf("Informe o ID a ser removido: \n");
-                    scanf("%d",&aux);
-                    if(pesqID(info,aux)){
-                        info = remocaoPorCopia(info, aux);
+                    scanf("%d",&aux2);
+                    if(pesqID(info,aux2)){
+                        info = remocaoPorCopia(info, aux2);
                         printf("Removido com sucesso!\n");
                     }else{
                         printf("ID nao encontrado na base de dados!\n");
@@ -107,8 +107,8 @@ int main(){
                 break;
             case 5:
                     printf("Informe o ID a ser procurado: \n");
-                    scanf("%d",&aux);
-                    arvaux = pesqID(info, aux);
+                    scanf("%d",&aux2);
+                    arvaux = pesqID(info, aux2);
                     if(!arvaux){
                         printf("ID nao encontrado! \n");
                     }else{
@@ -313,6 +313,7 @@ ARV_BIN_ENC maketree(ARV_BIN_ENC arv, MAQUINA comp){
     (arv)->pc = comp;
     (arv)->left = NULL;
     (arv)->right = NULL;
+    return arv;
 }
 
 void listarNo(ARV_BIN_ENC arv){
