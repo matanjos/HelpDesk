@@ -32,6 +32,7 @@ typedef DESCRITOR * FILA_DE_CHAMADOS;
 void cabecalho();
 int menu_programa();
 int menu_problema();
+int menu_chamado();
 int menu_principal();
 int chrpergunta();
 void fpause2();
@@ -65,7 +66,7 @@ CHAMADO cons_ret (FILA_DE_CHAMADOS);
 int main(){ 
     FILA_DE_CHAMADOS fc;
     PROBLEMA problm;
-    int option,option2,rodar,aux;
+    int option,option2,option3,rodar,aux;
     cria_fila(&fc);  
     cabecalho();
     rodar=menu_principal();
@@ -78,32 +79,72 @@ int main(){
                         case 0: //voltar
                             break;
                         case 1: //chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)
-                            if(fc->INICIO){
-                                printf("defeito direto : %d\n", (fc->INICIO)->chamado->problema.defeito);
-                                if((fc->INICIO)->next)
-                                    printf("defeito direto do proximo chamado : %d\n", ((fc->INICIO)->next)->chamado->problema.defeito);
-                                problm = top((fc->INICIO)->chamado); 
-                                if(problm.maquina != -1)
-                                    printf("Computador anexado: ID %d\n",problm.maquina); 
-                                else
-                                    printf("Nenhuma maquina anexada.\n"); 
-                                if(problm.defeito != -1)                    
-                                    printf("\nDefeito :%d\n",problm.defeito);
-                                else  
-                                    printf("\nDefeito: %s\n",problm.outro);
-                                    printf("Problema ja foi resolvido ?. (S ou N) \n\n");
-                                
-                                    aux = chrpergunta();
-                                    if((aux) && aux != -1){
-                                        pop(&((fc->INICIO)->chamado));
-                                        printf("Sucesso!\n"); 
-                                        if(eh_vazia_pilha((fc->INICIO)->chamado)){
-                                            retirar_chamado(fc);
+                            do{
+                                option=menu_chamado();
+                                switch(option){
+                                    case 1: //loop resolucao ate digitar 0
+                                        if(fc->INICIO){
+                                            do{
+                                                cabecalho();
+                                                problm = top((fc->INICIO)->chamado);
+                                                printf("\nRESOLUCAO DE PROBLEMAS:\n"); 
+                                                
+                                                if(problm.maquina != -1)
+                                                    printf("Computador anexado: ID %d\n",problm.maquina); 
+                                                else
+                                                    printf("Nenhuma maquina anexada.\n"); 
+                                                if(problm.defeito != -1)                    
+                                                    printf("\nDefeito :%d\n",problm.defeito);
+                                                else  
+                                                    printf("\nDefeito: %s\n",problm.outro);
+
+                                                printf("Resolver problema?. (S ou N)\n");
+                                                aux = chrpergunta();
+                                                if((aux) && aux != -1){
+                                                    pop(&((fc->INICIO)->chamado));
+                                                    printf("Sucesso!\n"); 
+                                                    if(eh_vazia_pilha((fc->INICIO)->chamado)){
+                                                        retirar_chamado(fc);
+                                                        printf("Problemas resolvidos - Chamado finalizado. \n");
+                                                        if(fc->INICIO){
+                                                            printf("Ir para o proximo chamado? (S ou N) \n");
+                                                            aux = chrpergunta();
+                                                        }else{
+                                                            printf("Todods os chamados foram finalizados!\n");
+                                                            aux = 0;
+                                                        }
+                                                    }
+                                                }
+                                            }while(aux);
+                                        }else{
+                                            printf("Sem chamados cadastrados! \n");
                                         }
-                                    }
-                            }else{
-                                printf("Sem chamados cadastrados! \n");
-                            }
+                                        fpause2();
+                                        break;
+                                    case 2: // cadastrar novo problema nesse chamado
+                                       /* if(fc->INICIO){
+                                            cabecalho();
+                                            do{
+                                                option3=menu_problema();
+                                                if(option3){
+                                                    push(&(fc->INICIO->chamado),option3);
+                                                    printf("Problema cadastrado com sucesso!. \n");
+                                                    fpause2();
+                                                }
+                                            }while(option3);
+                                            
+                                        }else{
+                                            printf("Nenhum chamado pendente/cadastrado!. \n");
+                                        }
+                                        fpause2();*/
+                                        break;
+                                    case 0: //voltar
+                                        break;
+                                    default:
+                                        printf("Opcao invalida! \n");
+                                }
+                            }while(option);
+                           
                                 
                             
                                 /* while(!eh_vazia_fila(fc)){
@@ -125,20 +166,7 @@ int main(){
                             fpause2();
                             break;
                         case 2: //Cadastrar novo(s) problema(s) (chamado atual).
-                            if(fc->INICIO){
-                                do{
-                                    option=menu_problema();
-                                    if(option){
-                                        push(&(fc->FIM->chamado),option);
-                                        printf("Problema cadastrado com sucesso!. \n");
-                                        fpause2();
-                                    }
-                                }while(option);
-                                
-                            }else{
-                                printf("Nenhum chamado pendente/cadastrado!. \n");
-                            }
-                            fpause2();
+                           
                             break;
                         case 3:  //novo chamado.\n
                             cabecalho();
@@ -162,21 +190,15 @@ int main(){
                             }
                             break;
                         case 4: 
-                            printf("teste:\n");
+                            cabecalho();
+                            printf("INFORMACOES GERAIS:\n");
                             if(!eh_vazia_fila(fc)){
-                                printf(" Contador de problemas atual :%d  \n",(fc->INICIO)->chamado->contador);
-                                printf(" Contador de problemas next:%d \n",((fc->INICIO)->next)->chamado->contador);
+                                printf("Numero de problemas do chamado atual :%d\n",(fc->INICIO)->chamado->contador);
+                                printf("Numero de chamados abertos:%d \n",(fc->qtd));
                             
-                                /*muda((fc->INICIO)->chamado);
-                                printf("muda\nproblm chamado atual :%d  \n",(fc->INICIO)->chamado->problema.defeito);
-                                printf("problm chamado next:%d \n",((fc->INICIO)->next)->chamado->problema.defeito);
-                                
-                                muda2(&((fc->INICIO)->chamado));
-                                printf("muda*\nproblm chamado atual :%d  \n",(fc->INICIO)->chamado->problema.defeito);
-                                printf("problm chamado next:%d \n",((fc->INICIO)->next)->chamado->problema.defeito);
-                            */}
+                               }
                             else
-                            	printf("no ten nada manito:\n");
+                            	printf("Nenhum chamado cadastrado\n");
 
 
                             
@@ -188,6 +210,7 @@ int main(){
                 }while(option2);	
             break;
             case 2:  //opcoes e base de dados
+                cabecalho();
                 fpause2();
                 break;
 
@@ -223,7 +246,7 @@ void push (CHAMADO *pp, int op){
     }
     if(op==8){
         (novo->problema).defeito=-1;    
-        printf("Qual o problema? Descreva-o sucintamente.\n\n");
+        printf("Qual o problema? Descreva-o sucintamente.\n");
         
         setbuf(stdin,NULL);
         fflush(stdin);
@@ -232,7 +255,7 @@ void push (CHAMADO *pp, int op){
         (novo->problema).outro[0]='\0';                                   
         (novo->problema).defeito = op;
     }
-    printf("Anexar um computador ao problema?. (S ou N) \n\n");
+    printf("Anexar um computador ao problema?. (S ou N) \n");
     do{
         aux = chrpergunta();
         if((aux) && aux != -1){
@@ -251,7 +274,6 @@ void push (CHAMADO *pp, int op){
         novo->contador = (*pp)->contador + 1;
     novo->next = *pp;
     *pp=novo;
-    printf("novo->contador: %d\n",novo->contador);
 }
 
 int eh_vazia_pilha (CHAMADO c){
@@ -280,7 +302,6 @@ CHAMADO zerarPilha(CHAMADO c){
 PROBLEMA top (CHAMADO c){
     if (eh_vazia_pilha(c)){
         printf ("\nERRO! Consulta e retirada em pilha vazia!\n");
-        fpause2();
     }else{
         return (c->problema);
     }
@@ -381,6 +402,10 @@ int menu_programa(){
         printf("3- Para fazer um novo chamado.\n");
         printf("4- teste contadores.\n");
         printf("\n0- Voltar.\n");
+
+        setbuf(stdin,NULL);
+        fflush(stdin);
+
         scanf("%d", &escolha);
         if(escolha < 0 || escolha > 4){
             printf("Opcao invalida\n");
@@ -390,6 +415,30 @@ int menu_programa(){
     }while (escolha < 0 || escolha > 4);
     return escolha;
 }
+
+int menu_chamado(){
+    int escolha;
+    do{
+        cabecalho();
+        printf("1- Resolucao de problemas.\n");
+        printf("2- Maquina anexada.\n");
+        //printf("2- Cadastrar novo(s) problema(s) (chamado atual).\n");
+        printf("\n0- Voltar.\n");
+
+        setbuf(stdin,NULL);
+        fflush(stdin);
+
+        scanf("%d", &escolha);
+
+        if(escolha < 0 || escolha > 2){
+            printf("Opcao invalida\n");
+            fpause2();
+        }
+            
+    }while (escolha < 0 || escolha > 2);
+    return escolha;
+}
+
 int menu_principal(){
     int escolha;
     do{
