@@ -1,12 +1,33 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h> 
+#include<math.h>
 
+
+//-----------geral-----------//
 typedef struct{
     int maquina; 
     int defeito;
     char outro[100];
 }PROBLEMA;
+
+typedef struct net{
+    unsigned char dig1;
+    unsigned char dig2;
+    unsigned char dig3;
+    unsigned char dig4;
+}IP;
+
+typedef struct maquin{
+    unsigned int id;
+    char marca[30];
+    char modelo[30];
+    char SO[30];
+    char estado;
+    IP ip;
+}MAQUINA;
+
+//-----------pilha-----------//
 
 typedef struct nodo_pilha{
     PROBLEMA problema;
@@ -15,7 +36,7 @@ typedef struct nodo_pilha{
 }NODO_PILHA;
 
 typedef NODO_PILHA * CHAMADO;
-
+//-----------fila-----------//
 typedef struct nodo_fila{
     CHAMADO chamado;
     struct nodo_fila * next;
@@ -28,6 +49,18 @@ typedef struct{
 }DESCRITOR;
 
 typedef DESCRITOR * FILA_DE_CHAMADOS;
+
+//-----------arvore-----------//
+
+typedef struct node {
+    MAQUINA pc;
+    struct node *left;
+    struct node *right;
+}NODE_ARV;
+
+typedef NODE_ARV * ARV_BIN_ENC;
+
+MAQUINA lerinfos(MAQUINA);
 
 void cabecalho();
 int menu_programa();
@@ -46,12 +79,6 @@ int pop (CHAMADO *);
 int eh_vazia_pilha (CHAMADO);
 PROBLEMA top (CHAMADO);
 
-void muda(CHAMADO c){
-    c->problema.defeito = 72;
-}
-void muda2(CHAMADO *c){
-    (*c)->problema.defeito = 95;
-}
 //---------fila---------
 void cria_fila (FILA_DE_CHAMADOS *);
 void inserir_chamado (FILA_DE_CHAMADOS);
