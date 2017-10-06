@@ -35,6 +35,7 @@ int menu_problema();
 int menu_chamado();
 int menu_principal();
 int chrpergunta();
+void problemaDec(int);
 void fpause2();
 
 //---------pilha---------
@@ -87,21 +88,24 @@ int main(){
                                             do{
                                                 cabecalho();
                                                 problm = top((fc->INICIO)->chamado);
-                                                printf("\nRESOLUCAO DE PROBLEMAS:\n"); 
+                                                printf("RESOLUCAO DE PROBLEMAS:\n"); 
                                                 
+                                                if(problm.defeito != -1){
+                                                    printf("\nProblema: ");
+                                                    problemaDec(problm.defeito);
+                                                }                 
+                                                else  
+                                                    printf("\nProblema: %s\n",problm.outro);
+
                                                 if(problm.maquina != -1)
                                                     printf("Computador anexado: ID %d\n",problm.maquina); 
                                                 else
                                                     printf("Nenhuma maquina anexada.\n"); 
-                                                if(problm.defeito != -1)                    
-                                                    printf("\nDefeito :%d\n",problm.defeito);
-                                                else  
-                                                    printf("\nDefeito: %s\n",problm.outro);
-
-                                                printf("Resolver problema?. (S ou N)\n");
+                                                printf("\nResolver problema?. (S ou N)\n");
                                                 aux = chrpergunta();
                                                 if((aux) && aux != -1){
                                                     pop(&((fc->INICIO)->chamado));
+                                                    cabecalho();
                                                     printf("Sucesso!\n"); 
                                                     if(eh_vazia_pilha((fc->INICIO)->chamado)){
                                                         retirar_chamado(fc);
@@ -166,9 +170,6 @@ int main(){
                             fpause2();
                             break;
                         case 2: //Cadastrar novo(s) problema(s) (chamado atual).
-                           
-                            break;
-                        case 3:  //novo chamado.\n
                             cabecalho();
                             printf("Novo chamado. \n");
                             aux = 0;
@@ -189,21 +190,20 @@ int main(){
                                 fpause2(); 
                             }
                             break;
-                        case 4: 
+                        case 3: 
                             cabecalho();
                             printf("INFORMACOES GERAIS:\n");
                             if(!eh_vazia_fila(fc)){
                                 printf("Numero de problemas do chamado atual :%d\n",(fc->INICIO)->chamado->contador);
                                 printf("Numero de chamados abertos:%d \n",(fc->qtd));
-                            
-                               }
-                            else
+                            }else
                             	printf("Nenhum chamado cadastrado\n");
-
-
                             
+                            printf("Numero de computadores cadastrados: fdc \n");
+
                             fpause2();
                             break;
+                       
                         default:
                             printf("Opcao invalida! \n");
                     }
@@ -398,21 +398,20 @@ int menu_programa(){
         cabecalho();
         printf("Digite:\n");
         printf("1- Chamado atual.\n");
-        printf("2- Cadastrar novo(s) problema(s) (chamado atual).\n");
-        printf("3- Para fazer um novo chamado.\n");
-        printf("4- teste contadores.\n");
+        printf("2- Para fazer um novo chamado.\n");
+        printf("3- Informacoes Gerais.\n");
         printf("\n0- Voltar.\n");
 
         setbuf(stdin,NULL);
         fflush(stdin);
 
         scanf("%d", &escolha);
-        if(escolha < 0 || escolha > 4){
+        if(escolha < 0 || escolha > 3){
             printf("Opcao invalida\n");
             fpause2();
         }
             
-    }while (escolha < 0 || escolha > 4);
+    }while (escolha < 0 || escolha > 3);
     return escolha;
 }
 
@@ -453,7 +452,7 @@ int menu_principal(){
         fflush(stdin); 
 
         scanf("%d", &escolha);
-        if(escolha < 0 || escolha > 3){
+        if(escolha < 0 || escolha > 2){
             printf("Opcao invalida\n");
             fpause2();
         }
@@ -461,14 +460,38 @@ int menu_principal(){
     return escolha;
 }
 
-
+void problemaDec(int cod){
+    switch(cod){
+        case 1:
+            printf("O computador nao liga.\n");
+            break;
+        case 2:
+            printf("O computador liga,mas nao aparece algum erro no monitor.\n");
+            break;
+        case 3:
+            printf("Esta ocorrendo algum problema na instalacao de algum programa.\n");
+            break;
+        case 4:
+            printf("Algum periferico nao esta funcionando de forma adequada.\n");
+            break;
+        case 5:
+            printf("O computador congela de forma repentina.\n");
+            break;
+        case 6:
+            printf("Alguma senha nao estiver funcionando.\n");
+            break;
+        case 7:
+            printf("A internet nao esta funcionando.\n");
+            break;
+    }
+}
 
 
 int menu_problema(){
     int trouble;
     do{
         cabecalho();
-        printf("\n\nCADASTRO DE PROBLEMAS:\n\n");
+        printf("CADASTRO DE PROBLEMAS:\n\n");
         printf("Digite o numero que melhor descreve o problema: \n");
         printf("1- Se o computador nao liga.\n");
         printf("2- Se o computador liga,mas nao aparece algum erro no monitor.\n");
