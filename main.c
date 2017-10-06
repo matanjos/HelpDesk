@@ -10,7 +10,7 @@ typedef struct net{
     unsigned char dig4;
 }IP;
 
-typedef struct maquina{
+typedef struct maquin{
     unsigned int id;
     char marca[30];
     char modelo[30];
@@ -23,9 +23,9 @@ typedef struct node {
     MAQUINA pc;
     struct node *left;
     struct node *right;
-}NODE;
+}NODE_ARV;
 
-typedef NODE * ARV_BIN_ENC;
+typedef NODE_ARV * ARV_BIN_ENC;
 
 MAQUINA lerinfos(MAQUINA);
 
@@ -305,7 +305,7 @@ MAQUINA lerinfos(MAQUINA pc){
 }
 
 ARV_BIN_ENC maketree(ARV_BIN_ENC arv, MAQUINA comp){
-	arv = (ARV_BIN_ENC) malloc (sizeof (NODE));
+	arv = (ARV_BIN_ENC) malloc (sizeof (NODE_ARV));
     if (!(arv)){
         printf("Memoria nao alocada!");
         exit(1);
