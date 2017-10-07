@@ -38,7 +38,7 @@ typedef NODO_PILHA * CHAMADO;
 
 void push (CHAMADO *, int);
 void cria_pilha(CHAMADO *);
-int pop (CHAMADO *);
+void pop (CHAMADO *);
 int eh_vazia_pilha (CHAMADO);
 PROBLEMA top (CHAMADO);
 
@@ -90,8 +90,8 @@ ARV_BIN_ENC ALGORITMODSW(ARV_BIN_ENC);
 
 void listarNo(ARV_BIN_ENC);
 void InOrdem(ARV_BIN_ENC);
-int conta_nodoright(ARV_BIN_ENC);   //auxiliares (contador)
-int conta_nodoleft(ARV_BIN_ENC);   //vai ate o filho mais a esquerda/direita apartir da raiz
+int conta_nodoright(ARV_BIN_ENC);   
+int conta_nodoleft(ARV_BIN_ENC);   
 
 //---------------------geral------------------
 MAQUINA lerinfos(MAQUINA);
@@ -134,68 +134,52 @@ int main(){
                             break;
 
                         case 1: //chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)
-                            do{
-                                option=menu_chamado();    //1 - resolucao de problemas 2 - maquina anexada
-                                switch(option){
-                                    case 0: //voltar
-                                        break;
+                             if(fc->INICIO){
+                                do{
+                                    cabecalho();
+                                    problm = top(cons(fc));
+                                    printf("RESOLUCAO DE PROBLEMAS:\n"); 
+                                    
+                                    if(problm.defeito != -1){
+                                        printf("\nProblema: ");
+                                        problemaDec(problm.defeito);
+                                    }                 
+                                    else  
+                                        printf("\nProblema: %s\n",problm.outro);
 
-                                    case 1: //loop resolucao ate digitar 0
-                                        if(fc->INICIO){
-                                            do{
-                                                cabecalho();
-                                                problm = top(cons(fc));
-                                                printf("RESOLUCAO DE PROBLEMAS:\n"); 
-                                                
-                                                if(problm.defeito != -1){
-                                                    printf("\nProblema: ");
-                                                    problemaDec(problm.defeito);
-                                                }                 
-                                                else  
-                                                    printf("\nProblema: %s\n",problm.outro);
-
-                                                if(problm.maquina != -1){
-                                                    arvaux = pesqID(info, problm.maquina);
-                                                    if(!arvaux){
-                                                        printf("Computador anexado: ID %d\n",problm.maquina); 
-                                                        printf("Computador ainda nao cadastrado na base de dados! \n");
-                                                    }else
-                                                        listarNo(arvaux);
-                                                }else
-                                                    printf("Nenhuma maquina anexada.\n"); 
-												
-                                                printf("\nResolver problema?. (S ou N)\n");
+                                    if(problm.maquina != -1){
+                                        arvaux = pesqID(info, problm.maquina);
+                                        if(!arvaux){
+                                            printf("Computador anexado: ID %d\n",problm.maquina); 
+                                            printf("Computador ainda nao cadastrado na base de dados! \n");
+                                        }else
+                                            listarNo(arvaux);
+                                    }else
+                                        printf("Nenhuma maquina anexada.\n"); 
+                                    
+                                    printf("\nResolver problema?. (S ou N)\n");
+                                    aux = chrpergunta();
+                                    if((aux) && aux != -1){
+                                        pop(&(fc->INICIO->chamado)); 
+                                        cabecalho();
+                                        printf("Sucesso!\n"); 
+                                        if(eh_vazia_pilha(cons(fc))){
+                                            retirar_chamado(fc);
+                                            printf("Problemas resolvidos - Chamado finalizado. \n");
+                                            if(!eh_vazia_fila(fc)){
+                                                printf("Ir para o proximo chamado? (S ou N) \n");
                                                 aux = chrpergunta();
-                                                if((aux) && aux != -1){
-                                                    pop(&(fc->INICIO->chamado)); 
-                                                    cabecalho();
-                                                    printf("Sucesso!\n"); 
-                                                    if(eh_vazia_pilha(cons(fc))){
-                                                        retirar_chamado(fc);
-                                                        printf("Problemas resolvidos - Chamado finalizado. \n");
-                                                        if(!eh_vazia_fila(fc)){
-                                                            printf("Ir para o proximo chamado? (S ou N) \n");
-                                                            aux = chrpergunta();
-                                                        }else{
-                                                            printf("Todos os chamados foram finalizados!\n");
-                                                            aux = 0;
-                                                        }
-                                                    }
-                                                }
-                                            }while(aux);
-                                        }else{
-                                            printf("Sem chamados cadastrados! \n");
+                                            }else{
+                                                printf("Todos os chamados foram finalizados!\n");
+                                                aux = 0;
+                                            }
                                         }
-                                        fpause2();
-                                        break;
-                                        
-                                    case 2: 
-                                        break;
-
-                                    default:
-                                        printf("Opcao invalida! \n");
-                                }
-                            }while(option);
+                                    }
+                                }while(aux);
+                            }else{
+                                printf("Sem chamados cadastrados! \n");
+                            }
+                            fpause2();
                             break;
 
                         case 2: //Cadastrar novo chamado.
@@ -251,14 +235,19 @@ int main(){
 
                         case 1: //CADASTRAR PC
                                 cabecalho();
-                                info = ins_ele(info,lerinfos(computador));
-                                contpc++;
-                                contpcTOTAL++;
-                                printf("Computador cadastrado com sucesso!\n");
-                                if(contpc == 8){
-                                    info = ALGORITMODSW(info);
-                                    printf("Base otimizada automaticamente.\n");
-                                    contpc = 0;
+                                computador =lerinfos(computador); 
+                                if(pesqID(info,computador.id)){
+                                    printf("ERRO! ID ja encontrado na Base de dados!\n");
+                                }else{
+                                    info = ins_ele(info,computador);
+                                    contpc++;
+                                    contpcTOTAL++;
+                                    printf("Computador cadastrado com sucesso!\n");
+                                    if(contpc == 8){
+                                        info = ALGORITMODSW(info);
+                                        printf("Base otimizada automaticamente.\n");
+                                        contpc = 0;
+                                    }
                                 }
                                 fpause2();
                             break;
@@ -315,7 +304,7 @@ int main(){
 
                         case 7: //FUNCAO PRA TESTES(CONTAR ATE O FILHO MAIS A ESQUERDA/DIREITA DA RAIZ)
                                 arvaux = info;
-                                printf("contador nivel filho direita %d e esq: %d\n",conta_nodoright(arvaux), conta_nodoleft(arvaux));
+                                printf("Nodos ate filho mais a esq: %d, mais a direita : %d\n",conta_nodoleft(arvaux)-1, conta_nodoright(arvaux)-1);
                                 fpause2();
                             break;
 
@@ -383,7 +372,7 @@ int eh_vazia_pilha (CHAMADO c){
     return (!c);
 }
 
-int pop (CHAMADO *c){
+void pop (CHAMADO *c){
     if (eh_vazia_pilha(*c)){
         printf ("\nERRO! Retirada em pilha vazia!\n");
         exit (3);
@@ -618,6 +607,7 @@ ARV_BIN_ENC EspinhaDorsal(ARV_BIN_ENC arvore){
     while(tmp){
         if(tmp->left){
             tmp = rotacao_direita(tmp);
+            
             if(aux)
                 father = tmp;  
             else
@@ -628,6 +618,7 @@ ARV_BIN_ENC EspinhaDorsal(ARV_BIN_ENC arvore){
             tmp = tmp->right;
         }
     }
+    
     return father;
 }
 
@@ -640,7 +631,7 @@ ARV_BIN_ENC balancearDorsal(ARV_BIN_ENC arvore){
             aux = rotacao_esquerda(arvore);
             arvore = aux;
             aux2= arvore;
-        }else{           
+        }else{
             aux = rotacao_esquerda(aux->right);
             aux2->right = aux;
             aux2 = aux2->right;
@@ -656,6 +647,7 @@ ARV_BIN_ENC balancearDorsal(ARV_BIN_ENC arvore){
             aux2 = aux2->right;
         }
     }
+    
     return aux;
 }
 
@@ -833,7 +825,7 @@ int menu_arvbin(){
         printf("4 - Alterar Cadastro. \n");
         printf("5 - Pesquisar por ID. \n");
         printf("6 - Otimizar Base de dados. (ALGORITMO DSW) \n");
-        printf("7 - Contar filho mais a esquerda/direita da raiz. \n");
+        printf("7 - Numero de nodos ate o filho mais a esquerda/direita. (COMPARACAO DSW)\n");
         printf("\n0 - Voltar \n");
         
         setbuf(stdin,NULL);
@@ -954,12 +946,12 @@ int chrpergunta(){
 int conta_nodoright(ARV_BIN_ENC arvaux){
     int aux ;
     for(aux = 0;arvaux; ++aux, arvaux=arvaux->right);
-    return aux;
+    return (aux);  
 }
 int conta_nodoleft(ARV_BIN_ENC arvaux){
     int aux ;
     for(aux = 0;arvaux; ++aux, arvaux=arvaux->left);
-    return aux;
+    return (aux);
 }
 
 void fpause2(){                     
