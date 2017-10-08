@@ -106,7 +106,7 @@ int menu_alterarCad();
 int chrpergunta();
 void problemaDec(int);
 void fpause2();
-
+double Log2 (double);
 
 //----------------------------------MAIN---------------------------------//
 
@@ -625,7 +625,7 @@ ARV_BIN_ENC EspinhaDorsal(ARV_BIN_ENC arvore){
 ARV_BIN_ENC balancearDorsal(ARV_BIN_ENC arvore){
     int n = conta_nodoright(arvore), m, i;
     ARV_BIN_ENC aux = arvore,aux2;
-    m = (pow(2,floor(log2(n+1))))-1;
+    m = (pow(2,floor(Log2(n+1))))-1;
     for(i=0 ; i<(n-m) ; i++){
         if(!i){
             aux = rotacao_esquerda(arvore);
@@ -757,20 +757,6 @@ int menu_alterarCad(){
     }while (escolha < 0 || escolha > 5);
     return escolha;
 }
-
-
-    /*
-    printf("Marca: %s\n",((arv)->pc).marca);
-    printf("Modelo: %s\n",((arv)->pc).modelo);
-    printf("Sistema Operacional: %s\n",((arv)->pc).SO);
-    printf("Estado da Maquina: ");
-    if(((arv->pc).estado == 'M') || ((arv->pc).estado == 'm'))
-        printf("M - Manutencao.\n");
-    else if(((arv->pc).estado == 'B') || ((arv->pc).estado == 'b'))
-        printf("B - Bom estado / Em uso.\n");
-    else
-         printf("D - Deposito.\n");
-    printf("IP: %d.%d.%d.%d \n", ((arv)->pc).ip.dig1, ((arv)->pc).ip.dig2, ((arv)->pc).ip.dig3, ((arv)->pc).ip.dig4);*/
 
 int menu_chamado(){
     int escolha;
@@ -943,6 +929,10 @@ int chrpergunta(){
     }   
 }
 
+double Log2(double v){  
+    // logaritmo na base 2
+    return (log(v)/log(2));  
+}
 int conta_nodoright(ARV_BIN_ENC arvaux){
     int aux ;
     for(aux = 0;arvaux; ++aux, arvaux=arvaux->right);
