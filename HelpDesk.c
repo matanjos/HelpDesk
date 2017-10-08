@@ -261,7 +261,8 @@ int main(){
                         case 3: //REMOVERPC
                                 printf("Informe o ID a ser removido: \n");
                                 scanf("%d",&aux);
-                                if(pesqID(info,aux)){
+                                arvaux = pesqID(info,aux);
+                                if(arvaux){
                                     info = remocaoPorCopia(info, aux);
                                     printf("Removido com sucesso!\n");
                                     contpcTOTAL--;
@@ -669,8 +670,8 @@ ARV_BIN_ENC pesqID(ARV_BIN_ENC arv, int id){
             }
             arv = arv->right;
         }
-        return NULL;
     }
+        return NULL;
 }
 
 ARV_BIN_ENC left(ARV_BIN_ENC arv){
