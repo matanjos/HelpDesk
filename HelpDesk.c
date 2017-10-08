@@ -830,7 +830,7 @@ void problemaDec(int cod){
             printf("O computador nao liga.\n");
             break;
         case 2:
-            printf("O computador liga,mas nao aparece algum erro no monitor.\n");
+            printf("O computador liga,mas aparece algum erro no monitor.\n");
             break;
         case 3:
             printf("Esta ocorrendo algum problema na instalacao de algum programa.\n");
