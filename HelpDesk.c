@@ -236,7 +236,8 @@ int main(){
                         case 1: //CADASTRAR PC
                                 cabecalho();
                                 computador =lerinfos(computador); 
-                                if(pesqID(info,computador.id)){
+                                arvaux = pesqID(info,computador.id);
+                                if(arvaux){
                                     printf("ERRO! ID ja encontrado na Base de dados!\n");
                                 }else{
                                     info = ins_ele(info,computador);
@@ -658,20 +659,16 @@ ARV_BIN_ENC ALGORITMODSW(ARV_BIN_ENC arvore){
 }
 
 ARV_BIN_ENC pesqID(ARV_BIN_ENC arv, int id){
-     if (!(arv))
-        printf("Nao consta no cadastro! \n");
-    else{ 
-        while(arv){
-            if (id < ((arv->pc).id)){
-                arv = arv->left;    
-            }else{
-                if(id == ((arv->pc).id)){   
-                    return arv;
-                    break;
-                }
-                arv = arv->right;
+    while(arv){
+        if (id < ((arv->pc).id)){
+            arv = arv->left;    
+        }else{
+            if(id == ((arv->pc).id)){   
+                return arv;
+                break;
             }
-        }  
+            arv = arv->right;
+        }
         return NULL;
     }
 }
