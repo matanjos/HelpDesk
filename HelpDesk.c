@@ -3,7 +3,7 @@
 #include<string.h> 
 #include<math.h>
 
-//-----------geral-----------//
+/*-----------geral-----------*/
 typedef struct{
     int maquina; 
     int defeito;
@@ -26,7 +26,7 @@ typedef struct maquin{
     IP ip;
 }MAQUINA;
 
-//-----------pilha-----------//
+/*-----------pilha-----------*/
 
 typedef struct nodo_pilha{
     PROBLEMA problema;
@@ -42,7 +42,7 @@ void pop (CHAMADO *);
 int eh_vazia_pilha (CHAMADO);
 PROBLEMA top (CHAMADO);
 
-//-----------fila-----------//
+/*-----------fila-----------*/
 typedef struct nodo_fila{
     CHAMADO chamado;
     struct nodo_fila * next;
@@ -63,7 +63,7 @@ int eh_vazia_fila (FILA_DE_CHAMADOS);
 
 CHAMADO cons (FILA_DE_CHAMADOS);
 
-//-----------arvore-----------//
+/*-----------arvore-----------*/
 
 typedef struct node {
     MAQUINA pc;
@@ -93,7 +93,7 @@ void InOrdem(ARV_BIN_ENC);
 int conta_nodoright(ARV_BIN_ENC);   
 int conta_nodoleft(ARV_BIN_ENC);   
 
-//---------------------geral------------------
+/*---------------------geral------------------*/
 MAQUINA lerinfos(MAQUINA);
 
 void cabecalho();
@@ -108,7 +108,7 @@ void problemaDec(int);
 void fpause2();
 double Log2 (double);
 
-//----------------------------------MAIN---------------------------------//
+/*----------------------------------MAIN---------------------------------*/
 
 int main(){ 
     FILA_DE_CHAMADOS fc;
@@ -126,14 +126,14 @@ int main(){
                 fpause2();          
                 break;
 
-            case 1:   //resolucao de problemas
+            case 1:   /*resolucao de problemas*/
                 do{
-                    option2=menu_programa();    // 1 - chamado atual, 2 - Fazer novo chamado, 3 - informacoes gerais
+                    option2=menu_programa();    /* 1 - chamado atual, 2 - Fazer novo chamado, 3 - informacoes gerais*/
                     switch(option2){
-                        case 0: //voltar
+                        case 0: /*voltar*/
                             break;
 
-                        case 1: //chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)
+                        case 1: /*chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)*/
                              if(fc->INICIO){
                                 do{
                                     cabecalho();
@@ -182,7 +182,7 @@ int main(){
                             fpause2();
                             break;
 
-                        case 2: //Cadastrar novo chamado.
+                        case 2: /*Cadastrar novo chamado.*/
                             cabecalho();
                             printf("Novo chamado. \n");
                             aux = 0;
@@ -190,7 +190,7 @@ int main(){
                                 option=menu_problema();
                                 if(option){
                                     if(!aux)
-                                        inserir_chamado(fc); //prepara o nodo pra receber os chamados
+                                        inserir_chamado(fc); /*prepara o nodo pra receber os chamados*/
                                     push(&(fc->FIM->chamado),option);
                                     printf("Problema cadastrado com sucesso!. \n");
                                     fpause2();
@@ -203,7 +203,7 @@ int main(){
                             }
                             break;
 
-                        case 3:   //info gerais
+                        case 3:   /*info gerais*/
                             cabecalho();
                             printf("INFORMACOES GERAIS:\n\n");
                             if(!eh_vazia_fila(fc)){
@@ -225,15 +225,15 @@ int main(){
                 }while(option2);	
             break;
 
-            case 2:  //opcoes e base de dados (arvore)
+            case 2:  /*opcoes e base de dados (arvore)*/
                 do{
                     cabecalho();
                     menu = menu_arvbin();
                     switch(menu){
-                        case 0: //VOLTAR
+                        case 0: /*VOLTAR*/
                             break;
 
-                        case 1: //CADASTRAR PC
+                        case 1: /*CADASTRAR PC*/
                                 cabecalho();
                                 computador =lerinfos(computador); 
                                 arvaux = pesqID(info,computador.id);
@@ -253,12 +253,12 @@ int main(){
                                 fpause2();
                             break;
 
-                        case 2: //LISTAR MAQUINAS EM ORDEM ID
+                        case 2: /*LISTAR MAQUINAS EM ORDEM ID*/
                                 InOrdem(info);
                                 fpause2();
                             break;
 
-                        case 3: //REMOVERPC
+                        case 3: /*REMOVERPC*/
                                 printf("Informe o ID a ser removido: \n");
                                 scanf("%d",&aux);
                                 arvaux = pesqID(info,aux);
@@ -272,7 +272,7 @@ int main(){
                                 fpause2();
                             break;
 
-                        case 4: //ALTERAR CADASTRO
+                        case 4: /*ALTERAR CADASTRO*/
 							printf("ALTERAR CADASTRO:\n\n");
 							printf("Informe o ID: \n");
                                 scanf("%d",&aux);
@@ -284,7 +284,7 @@ int main(){
                                 fpause2();  
                             break;
 
-                        case 5: //PESQUISAR ID
+                        case 5: /*PESQUISAR ID*/
                                 printf("Informe o ID a ser procurado: \n");
                                 scanf("%d",&aux);
                                 arvaux = pesqID(info, aux);
@@ -295,7 +295,7 @@ int main(){
                                 fpause2();   
                             break;
 
-                        case 6: //OTIMIZAR BASE(ALGORITMO DSW)
+                        case 6: /*OTIMIZAR BASE(ALGORITMO DSW)*/
                                 if(info){
                                     info = ALGORITMODSW(info);
                                     printf("Base otimizada com sucesso!\n");
@@ -304,7 +304,7 @@ int main(){
                                 fpause2();
                             break;
 
-                        case 7: //FUNCAO PRA TESTES(CONTAR ATE O FILHO MAIS A ESQUERDA/DIREITA DA RAIZ)
+                        case 7: /*FUNCAO PRA TESTES(CONTAR ATE O FILHO MAIS A ESQUERDA/DIREITA DA RAIZ)*/
                                 arvaux = info;
                                 printf("Nodos ate filho mais a esq: %d, mais a direita : %d\n",conta_nodoleft(arvaux)-1, conta_nodoright(arvaux)-1);
                                 fpause2();
@@ -325,7 +325,7 @@ int main(){
     return (0);
 }
 
-//-------------------- Pilha ------------------------//
+/*-------------------- Pilha ------------------------*/
 
 void cria_pilha(CHAMADO *pc){
     *pc=NULL;
@@ -393,7 +393,7 @@ PROBLEMA top (CHAMADO c){
     }
 }
 
-//-------------------- fila ------------------------//
+/*-------------------- fila ------------------------*/
 void cria_fila (FILA_DE_CHAMADOS *fc){
     *fc=(DESCRITOR *)malloc(sizeof(DESCRITOR));
     if (!*fc){
@@ -447,7 +447,7 @@ void retirar_chamado (FILA_DE_CHAMADOS fc){
     }
 }
 
-//--------------------------------Arvore--------------------------------//
+/*--------------------------------Arvore--------------------------------*/
 
 ARV_BIN_ENC maketree(ARV_BIN_ENC arv, MAQUINA comp){
 	arv = (ARV_BIN_ENC) malloc (sizeof (NODE_ARV));
@@ -517,10 +517,10 @@ ARV_BIN_ENC alterarCad(ARV_BIN_ENC arvore) {
 		aux = menu_alterarCad();
 		
 		switch(aux){
-			case 0://voltar
+			case 0:/*voltar*/
 				break;
 
-			case 1: //marca
+			case 1: /*marca*/
 				printf("Marca atual: %s\n",((arvore)->pc).marca);
 				
 				setbuf(stdin,NULL);
@@ -530,7 +530,7 @@ ARV_BIN_ENC alterarCad(ARV_BIN_ENC arvore) {
 				fpause2();
 				break;
 
-			case 2://modelo
+			case 2:/*modelo*/
 				printf("Modelo atual: %s\n",((arvore)->pc).modelo);
 
 				setbuf(stdin,NULL);
@@ -540,7 +540,7 @@ ARV_BIN_ENC alterarCad(ARV_BIN_ENC arvore) {
 				fpause2();
 				break;
 
-			case 3://SO
+			case 3:/*SO*/
 				printf("Sistema Operacional atual: %s\n",((arvore)->pc).SO);
 				setbuf(stdin,NULL);
 				fflush(stdin);
@@ -549,7 +549,7 @@ ARV_BIN_ENC alterarCad(ARV_BIN_ENC arvore) {
 				fpause2();
 				break;
 
-			case 4://ESTADO 
+			case 4:/*ESTADO */
 				printf("Estado atual da Maquina: ");
 				if(((arvore->pc).estado == 'M') || ((arvore->pc).estado == 'm'))
 					printf("M - Manutencao.\n");
@@ -566,7 +566,7 @@ ARV_BIN_ENC alterarCad(ARV_BIN_ENC arvore) {
 				fpause2();
 				break;
 
-			case 5://IP
+			case 5:/*IP*/
 				printf("IP: %d.%d.%d.%d \n", ((arvore)->pc).ip.dig1, ((arvore)->pc).ip.dig2, ((arvore)->pc).ip.dig3, ((arvore)->pc).ip.dig4);
 
 				setbuf(stdin,NULL);
@@ -707,7 +707,7 @@ void listarNo(ARV_BIN_ENC arv){
 }
 
 
-//--------------------------------Funcoes auxiliares--------------------------------//
+/*--------------------------------Funcoes auxiliares--------------------------------*/
 
 int menu_programa(){
     int escolha;
@@ -928,14 +928,16 @@ int chrpergunta(){
 }
 
 double Log2(double v){  
-    // logaritmo na base 2
+    /*logaritmo na base 2*/
     return (log(v)/log(2));  
 }
+
 int conta_nodoright(ARV_BIN_ENC arvaux){
     int aux ;
     for(aux = 0;arvaux; ++aux, arvaux=arvaux->right);
     return (aux);  
 }
+
 int conta_nodoleft(ARV_BIN_ENC arvaux){
     int aux ;
     for(aux = 0;arvaux; ++aux, arvaux=arvaux->left);

@@ -60,22 +60,21 @@ void inserir_chamado (CHAMADOS *,int);
 void ins_problm (PROBLEMAS *, int ,int);
 void ins_ele(MAQUINA *, MAQUINA);
 void listarPC(MAQUINA *);
-void listarTodosPcs(MAQUINA *);
+void listarTodosPcs(MAQUINA *,int);
+void selectionSort (MAQUINA *,int);
+void trocarPosicaoValores(MAQUINA *, MAQUINA *);
 void remocaoPC(MAQUINA *);
 void remocaoChamado(CHAMADOS *);
 void remocaoProblm(PROBLEMAS *);
 void alterarCad(MAQUINA *);
-
-//----------------------------------MAIN---------------------------------//
-
+/*-------------------------------------MAIN-------------------------------------*/
 int main(){ 
-     MAQUINA pc[NMAXPCS],pcAux;
-     CHAMADOS c[NMAXCHAMADOS];
-     PROBLEMAS proAux;
+    MAQUINA pc[NMAXPCS],pcAux;
+    CHAMADOS c[NMAXCHAMADOS];
+    PROBLEMAS proAux;
     int menu,option,option2,option3,rodar,aux,ind,ind2,contpc = 0,contpcTOTAL = 0,contProblm =0,contChamado = 0;
     iniciar_chamado(&c[0]);
     iniciar_pc(&pc[0]);
-
     cabecalho();
     do{
         rodar=menu_principal();
@@ -85,14 +84,14 @@ int main(){
                 fpause2();          
                 break;
 
-            case 1:   //resolucao de problemas
+            case 1:   /*Resolucao de problemas*/
                 do{
-                    option2=menu_programa();    // 1 - chamado atual, 2 - Fazer novo chamado, 3 - informacoes gerais
+                    option2=menu_programa();    /* 1 - Chamado atual, 2 - Fazer novo chamado, 3 - informacoes gerais*/
                     switch(option2){
-                        case 0: //voltar
+                        case 0: /*Voltar*/
                             break;
 
-                        case 1: //chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)
+                        case 1: /*Chamado atual (mostrar as infos , problema atual,qtd de problemas no chamado e perguntar se quer resolver)*/
                             if(c[0].ativo){
                                 do{
                                     cabecalho();
@@ -142,7 +141,7 @@ int main(){
                             fpause2();
                             break;
 
-                        case 2: //Cadastrar novo chamado.
+                        case 2: /*Cadastrar novo chamado.*/
                             cabecalho();
                             printf("Novo chamado. \n");
                             aux = 0;
@@ -152,7 +151,7 @@ int main(){
                                 if(option){
                                     if(!aux){
                                         ind = livreChamado(&c[0]);
-                                        inserir_chamado(&c[0],ind); //prepara o nodo pra receber os chamados
+                                        inserir_chamado(&c[0],ind); /*prepara o nodo pra receber os chamados*/
                                         c[ind].ativo = 1;
                                         contChamado++;
                                     }
@@ -170,7 +169,7 @@ int main(){
                             }
                             break;
 
-                        case 3:   //info gerais
+                        case 3:   /*Info gerais*/
                             cabecalho();
                             printf("INFORMACOES GERAIS:\n\n");
                             if(c[0].ativo){
@@ -192,15 +191,15 @@ int main(){
                 }while(option2);	
             break;
 
-            case 2:  //opcoes e base de dados (arvore)
+            case 2:  /*opcoes e base de dados (arvore)*/
                 do{
                     cabecalho();
                     menu = menu_base();
                     switch(menu){
-                        case 0: //VOLTAR
+                        case 0: /*VOLTAR*/
                             break;
 
-                        case 1: //CADASTRAR PC
+                        case 1: /*CADASTRAR PC*/
                                 cabecalho();
                                 contpcTOTAL++;
                                 if(contpcTOTAL == NMAXPCS){
@@ -218,12 +217,15 @@ int main(){
                                 fpause2();
                             break;
 
-                        case 2: //LISTAR MAQUINAS EM ORDEM ID
-                                listarTodosPcs(&pc[0]);
+                        case 2: /*LISTAR MAQUINAS EM ORDEM ID*/
+                        		if(pc[0].id != -1)
+                                	listarTodosPcs(&pc[0],contpcTOTAL);
+                                else
+                                	printf("Nenhum computador cadastrado! \n");
                                 fpause2();
                             break;
 
-                        case 3: //REMOVERPC
+                        case 3: /*REMOVERPC*/
                                 printf("Informe o ID a ser removido: \n");
                                 scanf("%d",&aux);
                                 ind = pesqID(&pc[0],aux);
@@ -237,7 +239,7 @@ int main(){
                                 fpause2();
                             break;
 
-                        case 4: //ALTERAR CADASTRO
+                        case 4: /*ALTERAR CADASTRO*/
 							printf("ALTERAR CADASTRO:\n\n");
 							printf("Informe o ID: \n");
                             scanf("%d",&aux);
@@ -249,7 +251,7 @@ int main(){
                             fpause2();  
                             break;
 
-                        case 5: //PESQUISAR ID
+                        case 5: /*PESQUISAR ID*/
                                 printf("Informe o ID a ser procurado: \n");
                                 scanf("%d",&aux);
                                 ind = pesqID(&pc[0],aux);
@@ -275,8 +277,7 @@ int main(){
     
     return (0);
 }
-
-//--------------------------------Funcoes --------------------------------//
+/*--------------------------------Funcoes --------------------------------*/
 
 void iniciar_chamado(CHAMADOS *c){
     int i,j;
@@ -365,8 +366,7 @@ void inserir_chamado (CHAMADOS *c,int ind){
 
 int pesqID(MAQUINA *pc, int id){
     int i;
-    if ((*(pc)).id == -1){
-        printf("Nao consta no cadastro! \n");
+    if ((*(pc)).id == -1){  /*Vet vazio*/
         return -1;
     }
     else{ 
@@ -379,7 +379,6 @@ int pesqID(MAQUINA *pc, int id){
         return -1;
     }
 }
-
 
 void ins_ele(MAQUINA *pc, MAQUINA comp){
         (*(pc))=comp;
@@ -402,29 +401,55 @@ void listarPC(MAQUINA * pc){
     printf("\n-----------------------------------------------------------------------\n");
 }
 
-void listarTodosPcs(MAQUINA *pc){
-    int i;
+void listarTodosPcs(MAQUINA *pc,int qtdpc){
     if ((*(pc)).id == -1)
         printf("Nenhum computador foi cadastrado\n");
     else{ 
-        for(i=0;i<NMAXPCS;i++){
-            if((*(pc+i)).id != -1){
+       int i;
+       selectionSort(&pc[0],qtdpc);
+       for(i=0;i<NMAXPCS;i++){
+       		if((*(pc+i)).id != -1){
                 listarPC((pc+i));
             }else
                 break;
-        }
+       }
+    		
     }
+}
+
+void selectionSort(MAQUINA *vetorDesordenado, int tamanhoVetor ){ 
+	MAQUINA aux;
+	int i, j, posicaoValorMinimo;
+	for (i = 0; i < ( tamanhoVetor - 1 ); i++){ 
+		posicaoValorMinimo = i; 
+		for (j = ( i + 1 ); j < tamanhoVetor; j++){ 		
+			if( (*(vetorDesordenado+j)).id < (*(vetorDesordenado+posicaoValorMinimo)).id){ 
+				posicaoValorMinimo = j; 
+			}
+		}
+		if ( i != posicaoValorMinimo ){
+			trocarPosicaoValores( &vetorDesordenado[i],&vetorDesordenado[posicaoValorMinimo]); 
+		}
+	}
+}
+
+void trocarPosicaoValores( MAQUINA *posicaoA, MAQUINA *posicaoB){ 
+	MAQUINA temporario;
+	temporario = *posicaoA;
+	*posicaoA = *posicaoB;
+	*posicaoB = temporario;     
 }
 
 void remocaoPC(MAQUINA *pc) {
     int i;
-    for(i=0;(*(pc+i)).id != -1; (*(pc+i))=(*(pc+i+1)),i++);
+    for(i=0;(*(pc+i)).id != -1;(*(pc+i))=(*(pc+i+1)),i++);
 }
+
 void remocaoChamado(CHAMADOS *c) {
     int i;
-    for(i=0;(*(c+i)).ativo;(*(c+i))=(*(c+i+1)),i++){
-    }
+    for(i=0;(*(c+i)).ativo;(*(c+i))=(*(c+i+1)),i++);
 }
+
 void remocaoProblm(PROBLEMAS *p){
     (*p).contador = -1;
 }
@@ -440,10 +465,10 @@ void alterarCad(MAQUINA *pc) {
 		aux = menu_alterarCad();
 		
 		switch(aux){
-			case 0://voltar
+			case 0:/*voltar*/
 				break;
 
-			case 1: //marca
+			case 1: /*marca*/
 				printf("Marca atual: %s\n",(*(pc)).marca);
 				
 				setbuf(stdin,NULL);
@@ -453,7 +478,7 @@ void alterarCad(MAQUINA *pc) {
 				fpause2();
 				break;
 
-			case 2://modelo
+			case 2:/*modelo*/
 				printf("Modelo atual: %s\n",(*(pc)).modelo);
 
 				setbuf(stdin,NULL);
@@ -463,7 +488,7 @@ void alterarCad(MAQUINA *pc) {
 				fpause2();
 				break;
 
-			case 3://SO
+			case 3:/*SO*/
 				printf("Sistema Operacional atual: %s\n",(*(pc)).SO);
 				setbuf(stdin,NULL);
 				fflush(stdin);
@@ -472,7 +497,7 @@ void alterarCad(MAQUINA *pc) {
 				fpause2();
 				break;
 
-			case 4://ESTADO 
+			case 4:/*ESTADO */
 				printf("Estado atual da Maquina: ");
 				if(((*(pc)).estado == 'M') || ((*(pc)).estado == 'm'))
 					printf("M - Manutencao.\n");
@@ -489,7 +514,7 @@ void alterarCad(MAQUINA *pc) {
 				fpause2();
 				break;
 
-			case 5://IP
+			case 5:/*IP*/
 				printf("IP: %d.%d.%d.%d \n", (*(pc)).ip.dig1, (*(pc)).ip.dig2, (*(pc)).ip.dig3, (*(pc)).ip.dig4);
 
 				setbuf(stdin,NULL);
@@ -548,8 +573,6 @@ int menu_alterarCad(){
     }while (escolha < 0 || escolha > 5);
     return escolha;
 }
-
-
 
 int menu_principal(){
     int escolha;
@@ -688,7 +711,6 @@ int chrpergunta(){
     setbuf(stdin,NULL);
     fflush(stdin);
     scanf("%c",&aux);
-
     if((aux == 's') || (aux == 'S')){
         return 1;
     }else if((aux == 'n') || (aux == 'N')){
@@ -698,13 +720,13 @@ int chrpergunta(){
     }   
 }
 
-
 void fpause2(){                     
     setbuf(stdin,NULL);
     fflush(stdin);
     printf("Pressione alguma tecla pra continuar... \n");
     getchar();
 }
+
 void cabecalho(){
     system("clear || cls");
     printf("-----------------------------------------------------------------------\n");
