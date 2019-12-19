@@ -8,7 +8,7 @@ typedef struct net{
     unsigned char dig2;
     unsigned char dig3;
     unsigned char dig4;
-}IP;
+}IP; 
 
 typedef struct maquin{
     unsigned int id;
