@@ -9,7 +9,7 @@ Usando fila, pilha e árvore binária:
     HelpDesk.c
 ```
 
-Sem estrutura de daods:
+Sem estrutura de dados:
 ```
     HelpDeskSEM.c
 ```
