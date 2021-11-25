@@ -1,26 +1,25 @@
-﻿# Helpdesk - C Language and Data structures
+﻿# Helpdesk - Linguagem C e Estrutura de Dados
 
-Simple Helpdesk program using C language.
+Programa de um HelpDesk simples escrito na linguagem C
 
-**Two main versions:**
+**Duas versões principais:**
 
-Using Trees, Queue and Stack:
+Usando fila, pilha e árvore binária:
 ```
     HelpDesk.c
 ```
 
-Without Data Structures
+Sem estrutura de daods:
 ```
     HelpDeskSEM.c
 ```
 
-FEDERAL UNIVERSITY OF SÃO FRANCISCO VALLEY - UNIVASF
+## Autores
 
-## Authors
+* **Jonas dos Santos** - [JonasCassiano](https://github.com/jonascsantos)
+* **Matheus dos Anjos** - [Matanjos](https://github.com/matanjos)
 
-* **Jonas dos Santos** - [JonasCassiano](https://github.com/jonascassiano)
-* **Matheus dos Anjos** - [MatanjosM](https://github.com)
+## Licença
 
-## License
-
-NON-COMMERCIAL 
+NÃO-COMERCIAL 
+UNIVERSIDADE FEDERAL DO VALE DO SÃO FRANCISCO - UNIVASF
